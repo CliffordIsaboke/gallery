@@ -15,29 +15,16 @@ const app = express();
 
 // connecting the database
 async function connectdb() {
-    await mongoose
-      .connect(process.env.MONGODB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      })
-      .then(() => {
+    try {
+        await mongoose.connect(process.env.MONGODB_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
         console.log("Connected to MongoDB");
-      })
-      .catch((err) => {
+    } catch (err) {
         console.log("Error connecting to MongoDB", err);
-      });
-  }
-
-
-
-// test if the database has connected successfully
-// let db = mongoose.connection;
-// db.once('open', ()=>{
-//     console.log('Database connected successfully')
-// })
-
-
-
+    }
+}
 
 // View Engine
 app.set('view engine', 'ejs');
@@ -48,18 +35,23 @@ app.use(express.static(path.join(__dirname, 'public')));
 // body parser middleware
 app.use(express.json())
 
-
 app.use('/', index);
 app.use('/image', image);
 
-
-
- 
 const PORT = process.env.PORT || 8000;
-app.listen(PORT,async() =>{
-    console.log(`Server is listening at http://localhost:${PORT}`)
-    await connectdb()
-});
 
+async function startServer() {
+    try {
+        await connectdb();
+        app.listen(PORT, () => {
+            console.log(`Server is listening at http://localhost:${PORT}`);
+        });
+    } catch (err) {
+        console.error(err);
+        process.exit(1);
+    }
+}
+
+startServer();
 
 module.exports = app;
