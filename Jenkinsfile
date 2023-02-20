@@ -18,7 +18,7 @@ pipeline {
         }
         stage('slack message'){
            steps{
-               slackSend color: 'good', message: 'Pipeline executed Successfully. https://gallery-isaboke.onrender.com'
+               slackSend color: 'good', message: 'Pipeline executed Successfully https://gallery-isaboke.onrender.com'
            }
         }
            stage('Deploy to Render') {
