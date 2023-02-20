@@ -14,16 +14,17 @@ const image = require('./routes/image');
 const app = express();
 
 // connecting the database
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log('Connected to MongoDB');
-    app.listen(port, () => {
-      console.log(`Server started on port ${port}`);
+async function connectdb() {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
     });
-  })
-  .catch((error) => {
-    console.error('Error connecting to MongoDB:', error);
-  });
+    console.log("Connected to MongoDB");
+  } catch (err) {
+    console.log("Error connecting to MongoDB", err);
+  }
+}
 
 // View Engine
 app.set('view engine', 'ejs');
