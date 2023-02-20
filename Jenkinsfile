@@ -29,7 +29,7 @@ pipeline {
     }
             post {
               success {
-            slackSend channel: '#isaboke',
+            slackSend channel: '#general',
                       color: 'good',
                       message: 'Build and test succeeded!'
             emailext body: 'The build and test succeeded.',
@@ -38,7 +38,7 @@ pipeline {
         }
 
                failure {
-            slackSend channel: '#isaboke',
+            slackSend channel: '#general',
                       color: 'danger',
                       message: 'Build and test failed!'
             emailext body: 'The build and test failed.',
