@@ -16,11 +16,6 @@ pipeline {
                 sh 'npm test'
             }
         }
-        stage('slack message'){
-           steps{
-               slackSend color: 'good', message: 'Pipeline executed Successfully https://gallery-isaboke.onrender.com'
-           }
-        }
            stage('Deploy to Render') {
             environment {
                 RENDER_EMAIL = credentials('render-email')
@@ -32,4 +27,18 @@ pipeline {
             }
         }
     }
+            post {
+              success {
+            slackSend channel: '#isaboke',
+                      color: 'good',
+                      message: 'Build and test succeeded!'
+        }
+
+        failure {
+            slackSend channel: '#isaboke',
+                      color: 'danger',
+                      message: 'Build and test failed!'
+              }
+          }
+       }
 
