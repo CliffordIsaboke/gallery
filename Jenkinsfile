@@ -20,19 +20,15 @@ pipeline {
                slackSend color: 'good', message: 'Pipeline executed Successfully'
            }
         }
-        stage('Deploy') {
+           stage('Deploy to Render') {
+            environment {
+                RENDER_EMAIL = credentials('render-email')
+                RENDER_PASSWORD = credentials('render-password')
+                 }
             steps {
-                sh 'ssh user@server "cd /path/to/app && git pull && npm install && pm2 restart app"'
+                sh 'render login --email $RENDER_EMAIL --password $RENDER_PASSWORD'
+                sh 'render up --detach'
             }
         }
     }
 
-    post {
-        always {
-            emailext subject: "Pipeline Completed - ${currentBuild.fullDisplayName}",
-                body: "Please find the attached pipeline script.",
-                to: "isabokec@gmail.com",
-                attachmentsPattern: "Jenkinsfile"
-        }
-    }
-}
