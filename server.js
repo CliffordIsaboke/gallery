@@ -16,7 +16,7 @@ const app = express();
 // connecting the database
 async function connectdb() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
+    await mongoose.connect(config.mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
